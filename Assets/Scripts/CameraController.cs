@@ -5,8 +5,11 @@ using UnityEngine;
 public class CameraController : MonoBehaviour
 {
     public Transform target;
+    public LayerMask obstacleMask; // ชั้นของสิ่งของที่จะต้องไม่ทะลุ
     public float smoothing = 5f;
-    Vector3 offset;
+    
+    private Vector3 offset; // ระยะห่างระหว่างกล้องกับเป้าหมาย
+
 
     void Start()
     {
@@ -14,12 +17,22 @@ public class CameraController : MonoBehaviour
         offset = transform.position - target.position;
     }
 
-    void FixedUpdate()
+    void LateUpdate()
     {
-        // ตำแหน่งเป้าหมายที่เกิดจากการเคลื่อนที่ของผู้เล่นบนแกน x และ z เท่านั้น
+        // คำนวณตำแหน่งเป้าหมายที่กล้องจะตาม
         Vector3 targetCamPos = target.position + offset;
 
-        // ปรับความลื่นของการเคลื่อนที่ของกล้อง
-        transform.position = Vector3.Lerp(transform.position, targetCamPos, smoothing * Time.deltaTime);
+        // ตรวจสอบว่ามีสิ่งของใด ๆ อยู่ระหว่างกล้องและเป้าหมายหรือไม่
+        RaycastHit hit;
+        if (Physics.Raycast(target.position, targetCamPos - target.position, out hit, offset.magnitude, obstacleMask))
+        {
+            // หากมีสิ่งของ ให้ปรับตำแหน่งของกล้องให้ห่างออกจากสิ่งของนั้น
+            transform.position = hit.point;
+        }
+        else
+        {
+            // หากไม่มีสิ่งของ ให้ปรับตำแหน่งของกล้องไปที่เป้าหมาย
+            transform.position = Vector3.Lerp(transform.position, targetCamPos, smoothing * Time.deltaTime);
+        }
     }
 }
