@@ -1,6 +1,11 @@
 fileFormatVersion: 2
-guid: a74affbde0b079547936153bcf944d3a
-timeCreated: 1488399492
+guid: 0e57cae8e83580444a7f86c198b1be3e
+labels:
+- LowPoly
+- Low-Poly
+- Storage
+- Pallet
+timeCreated: 1504885146
 licenseType: Store
 NativeFormatImporter:
   userData: 
