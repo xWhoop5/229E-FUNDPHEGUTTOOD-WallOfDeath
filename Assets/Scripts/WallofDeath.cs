@@ -4,7 +4,9 @@ using UnityEngine;
 
 public class WallofDeath : MonoBehaviour
 {
-    public float speed = 5f; // ความเร็วของกำแพง
+    public float speed = 5f; 
+    [SerializeField] GameObject player;
+    public PlayerMovement playerMovement;
 
 
     // Start is called before the first frame update
@@ -16,11 +18,22 @@ public class WallofDeath : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        transform.Translate(Vector3.forward * speed * Time.deltaTime);
+        transform.Translate(Vector3.left * speed * Time.deltaTime);
     }
 
-    void OnTriggerEnter(Collider other)
+    void OnCollisionEnter(Collision other)
     {
-       
+        
+
+        if (other.gameObject.CompareTag("Player"))
+        {
+            playerMovement.ResetTimer();
+            playerMovement.failedCon = true;
+            Destroy(player);
+        }
+
     }
+
+
+
 }
